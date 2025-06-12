@@ -260,4 +260,4 @@ async def account_info(ctx: discord.ApplicationContext, account_id: str):
 
 
 print("✅ Starting the bot...")
-bot.run(TOKEN)
+bot.run(os.environ["TOKEN"])
