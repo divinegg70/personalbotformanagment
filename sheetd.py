@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 # Setup credentials and access
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(google_creds, scope)
 client = gspread.authorize(creds)
 
 # Global worksheet variables (optional, if you want to reuse without re-fetching)
