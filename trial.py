@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 bot = discord.Bot()
-TOKEN = os.getenv("TOKEN")
+
 
 @bot.event
 async def on_ready():
@@ -32,11 +32,11 @@ async def add_account(
     await ctx.respond("Adding Account Please Wait ",ephemeral=True)
     asheet = sheetd.get_account_sheet()
     index = sheetd.index()
-    asheet.append_row([
-        index, login_type, username, password, shiny, shiny_bg, legendary,
-        shiny_legendary, hundo, level50, pokecoins, pokemon_storage, bag_space
-    ])
+   
+    asheet.append_row([index, login_type, username, password, shiny, shiny_bg, legendary,shiny_legendary, hundo, level50, pokecoins, pokemon_storage, bag_space,"" ,"" ,"FREE"])
+         
     embed = discord.Embed(title="✅ Account Added", color=discord.Color.og_blurple())
+    embed.add_field(name="Account ID ",value=index,inline=True)
     embed.add_field(name="Login type", value=login_type, inline=True)
     embed.add_field(name="Username", value=username, inline=True)
     embed.add_field(name="Password", value=password, inline=True)
@@ -108,7 +108,7 @@ async def start_grind(
             await ctx.followup.send("⚠️ Account is currently in use.")
 
         else:
-            await ctx.followup.send("❌ Unknown account status.")
+            await ctx.followup.send(f"❌ Unknown account status.{account_status}")
 
     else:
         await ctx.followup.send("❌ Device is currently in use.")
@@ -260,4 +260,4 @@ async def account_info(ctx: discord.ApplicationContext, account_id: str):
 
 
 print("✅ Starting the bot...")
-bot.run(TOKEN)
+bot.run(os.environ["TOKEN"])
