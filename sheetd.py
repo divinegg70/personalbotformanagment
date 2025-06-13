@@ -5,7 +5,6 @@ import json
 import os 
 
 
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 
 # Setup credentials and access
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
