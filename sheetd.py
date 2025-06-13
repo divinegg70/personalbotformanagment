@@ -1,15 +1,11 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
-import json
-import os
-
 
 # Setup credentials and access
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds_dict = json.loads(os.environ["GOOGLE_CREDS"])
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
+creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_CREDS, scope)
 client = gspread.authorize(creds)
 
 # Global worksheet variables (optional, if you want to reuse without re-fetching)
@@ -131,7 +127,8 @@ def set_account_cooldown(sheet_obj, account_id):
 
     cd_time = cooldown_until.strftime('%Y-%m-%d %H:%M:%S')
     sheet_obj.update_cell(row, col_cooldown, cd_time)
-    sheet_obj.update_cell(row, col_status, "COOLDOWN")
+    sheet_obj.update_cell(row, col_status, "CD")
+    
     return True
 
 
@@ -177,7 +174,21 @@ def update_account_values(sheet_obj, account_id, new_values):
             for key, val in new_values.items():
                 if key in header:
                     col = header.index(key)
-                    prev_val = int(row[col]) if row[col].isdigit() else 0
-                    sheet_obj.update_cell(i+1, col+1, str(prev_val + val))
+                    cell_val = row[col]
+                    
+                    # Safely handle non-integer cells
+                    try:
+                        prev_val = int(cell_val)
+                    except (ValueError, TypeError):
+                        print(f"⚠️ Skipping column '{key}' - current value is not an integer: '{cell_val}'")
+                        continue
+                    
+                    # Ensure val is also an int
+                    if not isinstance(val, int):
+                        print(f"⚠️ Skipping key '{key}' - update value is not an integer: {val}")
+                        continue
+                    
+                    print(f"✅ Updating {key}: {prev_val} + {val}")
+                    sheet_obj.update_cell(i + 1, col + 1, str(prev_val + val))
             return True
     return False
