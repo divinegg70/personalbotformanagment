@@ -7,7 +7,7 @@ import os
 # Setup credentials and access
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds_dict = json.loads(os.environ["GOOGLE_CREDS"])
-creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_CREDS, scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(creds_dict, scope)
 client = gspread.authorize(creds)
 
 # Global worksheet variables (optional, if you want to reuse without re-fetching)
