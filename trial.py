@@ -116,7 +116,7 @@ async def start_grind(
 
 @bot.slash_command(name="stop_grind", description="Stop a grind session")
 async def stop_grind(ctx: discord.ApplicationContext, session_id: str):
-    await ctx.respond("Stoping Grind Please Wait ",ephemeral=True)
+    await ctx.defer(ephemeral=True)
     asheet = sheetd.get_account_sheet()
     dsheet = sheetd.get_device_sheet()
     ses_sheet = sheetd.get_session_sheet()
